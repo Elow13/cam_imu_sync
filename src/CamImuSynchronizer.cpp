@@ -18,7 +18,7 @@
 #include <cam_imu_sync/CamImuSynchronizer.h>
 #include <flea3/Flea3DynConfig.h>
 #include <flea3/flea3_ros.h>
-#include <imu_vn_100/imu_ros_base.h>
+#include <imu_vn_100/imu_vn_100.h>
 
 namespace cam_imu_sync {
 
@@ -26,10 +26,7 @@ CamImuSynchronizer::CamImuSynchronizer(const ros::NodeHandle& pnh)
     : pnh_(pnh), imu_nh_(pnh, "imu"), cam_cfg_server_(pnh_) {
   // Initialize imu
   imu_ = boost::make_shared<Imu>(imu_nh_);
-  if (!imu_->initialize()) {
-    throw std::runtime_error("CamImuSynchronizer failed to initialize imu");
-  }
-  imu_->enableIMUStream(true);
+  imu_->Stream(true);
 
   // Initialize cameras
   int num_cameras = 0;
@@ -75,7 +72,7 @@ void CamImuSynchronizer::pollImages() {
       // After the first camera finished grabing, we get the time stamp from
       // imu. Because Grab blocks until the buffer is retrieved, this time stamp
       // is guaranteed to correspond to the imu that triggered this image
-      if (i == 0) time = imu_->getSyncTime();
+      if (i == 0) time = imu_->sync_info().time;
       image_msg->header.stamp = time;
       // Publish takes less then 0.1ms to finish, so it is safe to put it here
       // in the loop
@@ -85,7 +82,7 @@ void CamImuSynchronizer::pollImages() {
 }
 
 void CamImuSynchronizer::configureCameras(Config& config) {
-  config.fps = imu_->getSyncRate();
+  config.fps = imu_->sync_info().rate;
   for (auto& cam : cameras_) {
     cam->Stop();
     cam->camera().Configure(config);

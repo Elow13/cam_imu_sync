@@ -2,7 +2,7 @@
     <!--############### Node Configurations ##################-->
     <arg name="output" default="screen"/>
     <arg name="sync_rate" default="20"/>
-    <arg name="num_cameras" default="2"/>
+    <arg name="num_cameras" default="1"/>
 
     <!--############### IMU Configurations ###################-->
     <!-- Connection -->
@@ -29,7 +29,6 @@
     <!-- Common Interface -->
     <arg name="frame_rate" default="$(arg sync_rate)"/>
     <arg name="cam0" default="15322783"/>
-    <arg name="cam1" default="15322809"/>
 
     <group ns="sync/imu">
         <param name="port" type="string" value="$(arg port)"/>
@@ -50,10 +49,6 @@
         <param name="cam0/identifier" type="string" value="$(arg cam0)"/>
         <param name="cam0/camera_name" type="string" value="pg_$(arg cam0)"/>
         <param name="cam0/calib_url" type="string" value="file://${ROS_HOME}/camera_info/pg_$(arg cam0).yaml"/>
-
-        <param name="cam1/camera_name" type="string" value="pg_$(arg cam1)"/>
-        <param name="cam1/identifier" type="string" value="$(arg cam1)"/>
-        <param name="cam1/calib_url" type="string" value="file://${ROS_HOME}/camera_info/pg_$(arg cam1).yaml"/>
 
         <param name="auto_shutter" type="bool" value="false"/>
         <param name="shutter_ms" type="double" value="6"/>

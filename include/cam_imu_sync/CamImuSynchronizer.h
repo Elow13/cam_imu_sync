@@ -30,14 +30,14 @@ class Flea3Ros;
 }  // namespace flea3
 
 namespace imu_vn_100 {
-class ImuRosBase;
+class ImuVn100;
 }  // namespace imu_vn_100
 
 namespace cam_imu_sync {
 
 class CamImuSynchronizer {
  public:
-  using Imu = imu_vn_100::ImuRosBase;
+  using Imu = imu_vn_100::ImuVn100;
   using ImuPtr = boost::shared_ptr<Imu>;
   using Cam = flea3::Flea3Ros;
   using CamPtr = boost::shared_ptr<Cam>;
