@@ -69,6 +69,13 @@ void CamImuSynchronizer::pollImages() {
     cam->Grab(image_msg);
   }
 
+  {
+    // Force a first camera grab so that we wait for it to be triggered again
+    // for the loop below
+    auto image_msg = boost::make_shared<sensor_msgs::Image>();
+    cameras_[0]->Grab(image_msg);
+  }
+
   while (is_polling_ && ros::ok()) {
     ros::Time time;
     for (size_t i = 0; i < cameras_.size(); ++i) {
